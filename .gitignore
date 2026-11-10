@@ -1,0 +1,16 @@
+/node_modules
+/public/hot
+storage/app/images/
+storage/logs/
+/storage/*.key
+/vendor
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.cursorignore
+/.cursor
+.env
+# Cache ảnh thu nhỏ của CKFinder (tự tạo lại)
+/public/storage/uploads/.ckfinder/cache
