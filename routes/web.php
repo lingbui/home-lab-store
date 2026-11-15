@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Auth_Admin\LoginController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ManufactureController;
+use App\Http\Controllers\UnitController;
 
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
@@ -48,6 +51,37 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	// get change pass 
 	Route::get('/change/password', [LoginController::class, 'getChangePassword']);
 	Route::post('/change/password', [LoginController::class, 'changePassword']);
+
+	// manufacturers 
+	Route::get('/manufacturer', [ManufactureController::class, 'index']);
+	Route::get('/manufacturer/{id}', [ManufactureController::class, 'show']);
+	Route::put('/manufacturer/{id}', [ManufactureController::class, 'update']);
+	Route::post('/manufacturer', [ManufactureController::class, 'store']);
+	Route::get('/new/manufacturer', function () {
+		return view('manufacturer.new_manufacturer');
+	});
+	Route::delete('/manufacturer/{id}', [ManufactureController::class, 'destroy']);
+
+	// units 
+	Route::get('/unit', [UnitController::class, 'index']);
+	Route::get('/unit/{id}', [UnitController::class, 'show']);
+	Route::put('/unit/{id}', [UnitController::class, 'update']);
+	Route::post('/unit', [UnitController::class, 'store']);
+	Route::get('/new/unit', function () {
+		return view('unit.new_unit');
+	});
+	Route::delete('/unit/{id}', [UnitController::class, 'destroy']);
+
+	// products 
+	Route::get('/product', [ProductController::class, 'index']);
+	Route::get('/product/detail/{id}', [ProductController::class, 'show']);
+	Route::post('/product/update', [ProductController::class, 'update']);
+	Route::post('/product', [ProductController::class, 'store']);
+	Route::get('/new/product', function () {
+		return view('product.new_product');
+	});
+	Route::delete('/product/{id}', [ProductController::class, 'destroy']);
+	Route::put('/update-status-product/{id}', [ProductController::class, 'updateStatus']);
 
 });
 
