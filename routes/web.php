@@ -28,6 +28,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
 use App\Http\Controllers\Customer\RegisterController as CustomerRegisterController;
+use App\Http\Controllers\Customer\ContactController as CustomerContactController;
 
 
 // login 
@@ -50,6 +51,14 @@ Route::post('/register', [CustomerRegisterController::class, 'register']);
 Route::get('/fulfill/information', [CustomerRegisterController::class, 'fulfill']);
 // tao tai khoan
 Route::post('/create/account', [CustomerRegisterController::class, 'createAccount']);
+
+// link 
+Route::get('/gioi-thieu', function () {
+	return view('introduction');
+});
+
+Route::get('/lien-he', [CustomerContactController::class, 'getFormContact']);
+Route::post('/lien-he', [CustomerContactController::class, 'postFormContact']);
 
 // admin
 Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminLogin'], function () {
