@@ -15,10 +15,15 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth_Admin\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ManufactureController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\PostCategoryController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
@@ -48,6 +53,17 @@ Route::post('/create/account', [CustomerRegisterController::class, 'createAccoun
 
 // admin
 Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminLogin'], function () {
+	// collaborator member 
+	Route::get('/user/collaborator', [UserController::class, 'collaborator']);
+	Route::post('/user/collaborator', [UserController::class, 'store']);
+	Route::put('/user/collaborator/{id}', [UserController::class, 'updateCollaborator']);
+	Route::get('/user/collaborator/{id}', [UserController::class, 'showCollaborator']);
+	Route::post('/user/collaborator/update', [UserController::class, 'updateInformationCollaborator']);
+	Route::delete('/user/collaborator/{id}', [UserController::class, 'destroyCollaborator']);
+	Route::get('/new/collaborator', function () {
+		return view('user.new_collaborator');
+	});
+
 	// transaction
 	Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
 
@@ -76,6 +92,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	// get change pass 
 	Route::get('/change/password', [LoginController::class, 'getChangePassword']);
 	Route::post('/change/password', [LoginController::class, 'changePassword']);
+
+	// post category 
+	Route::resource('post-category', PostCategoryController::class);
+	Route::post('/update-post-category', [PostCategoryController::class, 'edit']);
+	Route::get('/new/post-category', function () {
+		return view('post_category.new_post_category');
+	});
+
+	// posts 
+	Route::resource('post', PostController::class);
+	Route::get('post/detail/{id}', [PostController::class, 'showPost']);
+	Route::post('post/update', [PostController::class, 'updatePost']);
+	Route::get('/new/post', function () {
+		return view('post.new_post');
+	});
+
+	// tags 
+	Route::resource('tag', TagController::class);
+	Route::get('/new/tag', function () {
+		return view('tag.new_tag');
+	});
 
 	// manufacturers 
 	Route::get('/manufacturer', [ManufactureController::class, 'index']);
@@ -120,6 +157,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	Route::put('/transaction/cancel/{id}', [TransactionController::class, 'cancelTransaction']);
 	Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
 
+	// contacts
+	Route::get('/contact', [ContactController::class, 'index']);
+	Route::put('/update-status-contact/{id}', [ContactController::class, 'updateStatus']);
+
+	// customer member 
+	Route::get('/list_customers', function () {
+		return view('user.customers_list');
+	});
+	Route::post('/list_customers/{id}', [UserController::class, 'filterCustomer']);
+	Route::get('/list_customers/{id}', [UserController::class, 'filterCustomer']);
+	Route::get('/user/customer', [UserController::class, 'customer']);
+	Route::put('/user/customer/{id}', [UserController::class, 'updateCustomer']);
+	Route::delete('/user/customer/{id}', [UserController::class, 'destroyCustomer']);
+	Route::get('/user/customer/{id}', [UserController::class, 'show']);
+	Route::get('/report_customer', [UserController::class, 'reportCustomer']);
 });
 
 // admin
