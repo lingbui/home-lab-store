@@ -29,6 +29,8 @@ use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
 use App\Http\Controllers\Customer\RegisterController as CustomerRegisterController;
 use App\Http\Controllers\Customer\ContactController as CustomerContactController;
+use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
+use App\Http\Controllers\Customer\ChangePasswordController as CustomerChangePasswordController;
 
 
 // login 
@@ -59,6 +61,21 @@ Route::get('/gioi-thieu', function () {
 
 Route::get('/lien-he', [CustomerContactController::class, 'getFormContact']);
 Route::post('/lien-he', [CustomerContactController::class, 'postFormContact']);
+// trang chu
+Route::get('/', function () {
+	return view('home');
+});
+
+Route::group(['prefix' => '/', 'middleware' => 'CheckUserLogin'], function () {
+	// my account
+	Route::get('/my_account/{customer_id}', [CustomerAccountController::class, 'myAccount']);
+	// update account information
+	Route::post('/my_account', [CustomerAccountController::class, 'updateMyAccount']);
+
+	// change password
+	Route::get('/change/password', [CustomerChangePasswordController::class, 'getFormChangePassword']);
+	Route::post('/change/password', [CustomerChangePasswordController::class, 'changePassword']);
+});
 
 // admin
 Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminLogin'], function () {
