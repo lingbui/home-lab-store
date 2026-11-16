@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Auth_Admin\LoginController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ManufactureController;
 use App\Http\Controllers\UnitController;
 
@@ -44,9 +46,32 @@ Route::get('/fulfill/information', [CustomerRegisterController::class, 'fulfill'
 // tao tai khoan
 Route::post('/create/account', [CustomerRegisterController::class, 'createAccount']);
 
+// admin
+Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminLogin'], function () {
+	// transaction
+	Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
+
+	// report chart
+	Route::get('/chart', [AdminController::class, 'index']);
+	Route::get('/report_product', function () {
+		return view('admin.report_product');
+	});
+	Route::get('/report_transaction', function () {
+		return view('admin.report_transaction');
+	});
+	Route::post('/report_product/{id}', [ProductController::class, 'reportProduct']);
+	Route::get('/report_product/{id}', [ProductController::class, 'reportProduct']);
+	Route::post('/report_transaction/from_date={from_date}&to_date={to_date}&status={status}', [TransactionController::class, 'reportTransaction']);
+	Route::get('/report_transaction/from_date={from_date}&to_date={to_date}&status={status}', [TransactionController::class, 'reportTransaction']);
+	
+});
+
 // admin-collaborator
 Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 
+	// get home page admin 
+	Route::get('/', [AdminController::class, 'homePage']);
+	Route::get('/home', [AdminController::class, 'homePage']);
 
 	// get change pass 
 	Route::get('/change/password', [LoginController::class, 'getChangePassword']);
@@ -82,6 +107,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	});
 	Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 	Route::put('/update-status-product/{id}', [ProductController::class, 'updateStatus']);
+
+	// transactions
+	Route::get('/transaction', [TransactionController::class, 'index']);
+	Route::get('/transaction_pending', [TransactionController::class, 'pending']);
+	Route::get('/transaction_shipped', [TransactionController::class, 'shipped']);
+	Route::get('/transaction_delivered', [TransactionController::class, 'delivered']);
+	Route::get('/transaction_cancel', [TransactionController::class, 'cancel']);
+	Route::get('/transaction/{order_id}', [TransactionController::class, 'show']);
+	Route::get('/transaction_note/{id}', [TransactionController::class, 'note']);
+	Route::put('/transaction/{id}', [TransactionController::class, 'update']);
+	Route::put('/transaction/cancel/{id}', [TransactionController::class, 'cancelTransaction']);
+	Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
 
 });
 
