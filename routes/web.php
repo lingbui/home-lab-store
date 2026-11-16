@@ -30,6 +30,9 @@ use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
 use App\Http\Controllers\Customer\RegisterController as CustomerRegisterController;
 use App\Http\Controllers\Customer\SearchController as CustomerSearchController;
 use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
+use App\Http\Controllers\Customer\CartController as CustomerCartController;
+use App\Http\Controllers\Customer\CheckoutController as CustomerCheckoutController;
+use App\Http\Controllers\Customer\VnpayController as CustomerVnpayController;
 use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
 use App\Http\Controllers\Customer\ChangePasswordController as CustomerChangePasswordController;
 use App\Http\Controllers\Customer\WishlistController as CustomerWishlistController;
@@ -83,6 +86,29 @@ Route::get('/chuyen-muc/{slug}', [CustomerHomeController::class, 'postTopic']);
 
 //chi tiet + noi dung bai viet  
 Route::get('/tin-tuc-su-kien/{slug}', [CustomerHomeController::class, 'postDetail']);
+
+// cart 
+Route::post('/add/item', [CustomerCartController::class, 'addSpecialItem']);
+Route::get('/checkout/cart', [CustomerCartController::class, 'index']);
+Route::post('/checkout/cart', [CustomerCartController::class, 'addItem']);
+Route::delete('/remove-cart/{id}', [CustomerCartController::class, 'remove']);
+Route::get('/clear/cart', [CustomerCartController::class, 'clearCart']);
+// increment 
+Route::post('/increment/cart', [CustomerCartController::class, 'increment']);
+// decrement 
+Route::post('/decrement/cart', [CustomerCartController::class, 'decrement']);
+Route::get('/checkout/cart/item/number', [CustomerCartController::class, 'getItemNumber']);
+
+// checkout payment 
+Route::get('/checkout/payment', [CustomerCheckoutController::class, 'index']);
+Route::post('/checkout/payment', [CustomerCheckoutController::class, 'order']);
+
+// VNPay
+Route::get('/vnpay/return', [CustomerVnpayController::class, 'return']);
+Route::match(['get', 'post'], '/vnpay/ipn', [CustomerVnpayController::class, 'ipn']);
+
+// order-received
+Route::get('/checkout/order-received/{order_id}', [CustomerCheckoutController::class, 'orderReceived']);
 
 Route::group(['prefix' => '/', 'middleware' => 'CheckUserLogin'], function () {
 	// my account  
