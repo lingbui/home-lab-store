@@ -28,10 +28,19 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
 use App\Http\Controllers\Customer\RegisterController as CustomerRegisterController;
-use App\Http\Controllers\Customer\ContactController as CustomerContactController;
+use App\Http\Controllers\Customer\SearchController as CustomerSearchController;
+use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
 use App\Http\Controllers\Customer\ChangePasswordController as CustomerChangePasswordController;
+use App\Http\Controllers\Customer\WishlistController as CustomerWishlistController;
+use App\Http\Controllers\Customer\TransactionHistoryController as CustomerTransactionHistoryController;
+use App\Http\Controllers\Customer\ContactController as CustomerContactController;
+use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 
+// trang chu 
+Route::get('/', function () {
+	return view('home');
+});
 
 // login 
 Route::get('/login', function () {
@@ -54,6 +63,50 @@ Route::get('/fulfill/information', [CustomerRegisterController::class, 'fulfill'
 // tao tai khoan
 Route::post('/create/account', [CustomerRegisterController::class, 'createAccount']);
 
+// tim kiem san pham 
+Route::get('/search', [CustomerSearchController::class, 'search']);
+
+// danh mục sản phẩm
+Route::get('/danh-muc/{slug}', [CustomerProductController::class, 'index']);
+
+// chi tiet san pham 
+Route::get('/san-pham/{slug}', [CustomerHomeController::class, 'productDetail']);
+
+// tat ca bai viet 
+Route::get('/tin-tuc-su-kien', [CustomerHomeController::class, 'index']);
+
+// bai viet theo tag 
+Route::get('/tag/{slug}', [CustomerHomeController::class, 'postTag']);
+
+// bai viet theo chuyen muc 
+Route::get('/chuyen-muc/{slug}', [CustomerHomeController::class, 'postTopic']);
+
+//chi tiet + noi dung bai viet  
+Route::get('/tin-tuc-su-kien/{slug}', [CustomerHomeController::class, 'postDetail']);
+
+Route::group(['prefix' => '/', 'middleware' => 'CheckUserLogin'], function () {
+	// my account  
+	Route::get('/my_account/{customer_id}', [CustomerAccountController::class, 'myAccount']);
+	// update account information 
+	Route::post('/my_account', [CustomerAccountController::class, 'updateMyAccount']);
+
+	// change password 
+	Route::get('/change/password', [CustomerChangePasswordController::class, 'getFormChangePassword']);
+	Route::post('/change/password', [CustomerChangePasswordController::class, 'changePassword']);
+
+	// wishlist 
+	Route::get('/wishlist', [CustomerWishlistController::class, 'index']);
+	Route::delete('/remove-wishlist/{product_id}', [CustomerWishlistController::class, 'delete']);
+
+	// my transactions 
+	Route::get('/transaction/history/{customer_id}', [CustomerTransactionHistoryController::class, 'myTransaction']);
+	// order detail 
+	Route::get('/transaction/detail/{order_id}', [CustomerTransactionHistoryController::class, 'myOrder']);
+});
+
+// add item on wishlist 
+Route::post('/wishlist', [CustomerWishlistController::class, 'addWishlist']);
+
 // link 
 Route::get('/gioi-thieu', function () {
 	return view('introduction');
@@ -61,21 +114,6 @@ Route::get('/gioi-thieu', function () {
 
 Route::get('/lien-he', [CustomerContactController::class, 'getFormContact']);
 Route::post('/lien-he', [CustomerContactController::class, 'postFormContact']);
-// trang chu
-Route::get('/', function () {
-	return view('home');
-});
-
-Route::group(['prefix' => '/', 'middleware' => 'CheckUserLogin'], function () {
-	// my account
-	Route::get('/my_account/{customer_id}', [CustomerAccountController::class, 'myAccount']);
-	// update account information
-	Route::post('/my_account', [CustomerAccountController::class, 'updateMyAccount']);
-
-	// change password
-	Route::get('/change/password', [CustomerChangePasswordController::class, 'getFormChangePassword']);
-	Route::post('/change/password', [CustomerChangePasswordController::class, 'changePassword']);
-});
 
 // admin
 Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdminLogin'], function () {
