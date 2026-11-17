@@ -170,16 +170,17 @@ class CheckoutController extends Controller
             $data
         );
 
-        if (Session::has('cart')) {
-            Session::forget('cart');
-        }
-
         if (!$transaction) {
             return view('500');
         }
 
         if (!$this->orderCompletion->complete($transaction)) {
             return Redirect::back()->withErrors('Sản phẩm không đáp ứng đủ số lượng trong kho.');
+        }
+
+        // Chỉ xóa giỏ hàng khi đơn đã đặt thành công, để khách không mất giỏ nếu thiếu kho
+        if (Session::has('cart')) {
+            Session::forget('cart');
         }
 
         return redirect('/checkout/order-received/' . $transaction->order_id);

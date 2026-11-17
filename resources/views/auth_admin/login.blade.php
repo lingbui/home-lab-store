@@ -63,6 +63,7 @@
           </div>
           <!-- /.col -->
         </div>
+        <p style="margin-top:12px; text-align:center"><a href="{{ route('password.request') }}">Quên mật khẩu?</a></p>
       </form>
     </div>
     <!-- /.login-box-body -->

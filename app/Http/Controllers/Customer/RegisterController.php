@@ -57,6 +57,7 @@ class RegisterController extends Controller
             'birthday' => 'required',
             'gender' => 'required',
             'phone_number'=>'min:9|max:11',
+            'email' => 'required|email|max:191|unique:customers,email',
             'address' => 'required',
             'password'=> 'required|min:8|max:16|regex:/^[a-zA-Z0-9]+$/',
             're_password'=> 'required|min:8|max:16|regex:/^[a-zA-Z0-9]+$/',
@@ -76,6 +77,9 @@ class RegisterController extends Controller
             're_password.min'=>'Mật khẩu nhập lại cần ít nhất 8 kí tự',
             're_password.max'=>'Mật khẩu nhập lại có tối đa 16 kí tự',
             'address.required' => 'Bạn chưa nhập địa chỉ',
+            'email.required' => 'Bạn chưa nhập email',
+            'email.email' => 'Email không hợp lệ',
+            'email.unique' => 'Email này đã được đăng ký',
         ]);
 
         if ($validator->fails()) {
@@ -89,6 +93,7 @@ class RegisterController extends Controller
         $data['birthday'] = \Carbon\Carbon::parse($data['birthday'])->format('Y-m-d');
         $data['gender'] = $request->gender;
         $data['phone_number'] = $request->phone_number;
+        $data['email'] = $request->email;
         $data['address'] = $request->address;
         $data['password'] = bcrypt($request->password);
         $data['status'] = 1;
