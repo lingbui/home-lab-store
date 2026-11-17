@@ -25,6 +25,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\PostCategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
@@ -193,7 +194,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	Route::get('/', [AdminController::class, 'homePage']);
 	Route::get('/home', [AdminController::class, 'homePage']);
 
-	// get change pass 
+	// gửi khuyến mãi (email + SMS)
+	Route::get('/promotion', [PromotionController::class, 'index']);
+	Route::post('/promotion/send', [PromotionController::class, 'send']);
+
+	// get change pass
 	Route::get('/change/password', [LoginController::class, 'getChangePassword']);
 	Route::post('/change/password', [LoginController::class, 'changePassword']);
 

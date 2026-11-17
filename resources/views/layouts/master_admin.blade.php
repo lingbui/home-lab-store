@@ -271,6 +271,7 @@
               <li><a href="/admin/report_transaction"><i class="fa fa-star"></i>Báo cáo giao dịch</a></li>
               @endif
               <li><a href="/admin/report_customer"><i class="fa fa-birthday-cake"></i>Sinh nhật khách hàng</a></li>
+              <li><a href="/admin/promotion"><i class="fa fa-envelope"></i>Gửi khuyến mãi</a></li>
             </ul>
           </li>
           
