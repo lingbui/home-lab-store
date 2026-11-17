@@ -98,6 +98,7 @@ CREATE TABLE `customers` (
   `birthday` varchar(255) NOT NULL,
   `gender` tinyint(4) NOT NULL,
   `phone_number` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `address` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `score_awards` double(8,2) NOT NULL DEFAULT 0.00,
@@ -1057,3 +1058,14 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Bảng lưu token đặt lại mật khẩu (quên mật khẩu quản trị)
+CREATE TABLE IF NOT EXISTS `password_resets` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Email khách hàng (dùng cho quên mật khẩu). Khách cũ chưa có email thì để NULL.
+ALTER TABLE `customers` ADD UNIQUE KEY `customers_email_unique` (`email`);

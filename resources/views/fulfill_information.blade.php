@@ -78,6 +78,13 @@
 											<input type="text" id="address" name="address" class="input-text">
 										</div>
                                     </li>
+                                    <br>
+                                    <li class="fields">
+										<label for="email" class="required"><em>*</em>Email</label>
+										<div class="input-box">
+											<input type="email" id="email" name="email" class="input-text">
+										</div>
+                                    </li>
 									<br>
                                     <li class="fields">
 										<label for="password" class="required"><em>*</em>Mật khẩu</label>
@@ -118,6 +125,7 @@
 		form_data.append("gender", $('#gender').val());
 		form_data.append("phone_number", $('#phone_number').val());
 		form_data.append("address", $('#address').val());
+		form_data.append("email", $('#email').val());
 		form_data.append("password", $('#password').val());
 		form_data.append("re_password", $('#re_password').val());
 

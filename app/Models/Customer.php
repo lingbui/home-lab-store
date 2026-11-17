@@ -18,10 +18,19 @@ class Customer extends Authenticatable
     protected $guard = 'customer';
     protected $table = 'customers';
     protected $fillable = [
-        'name', 'birthday', 'gender', 'phone_number', 
+        'name', 'birthday', 'gender', 'phone_number', 'email',
         'address', 'Số điện thoại', 'password', 'score_awards', 
         'money_payment_transactions', 'remember_token', 'status'
     ];
+
+    /**
+     * Gửi email đặt lại mật khẩu, link trỏ tới trang khách hàng (không dùng route của quản trị).
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $url = url('/reset/password/' . $token) . '?email=' . urlencode($this->email);
+        $this->notify(new \App\Notifications\CustomerResetPassword($url));
+    }
 
     /**
      * The attributes that should be hidden for arrays.

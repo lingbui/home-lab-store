@@ -81,3 +81,4 @@ Mở trình duyệt: http://localhost:8000 (nhớ đổi `APP_URL` trong `.env` 
 - Ảnh sản phẩm, bài viết, logo... nằm trong `public/images/`. File `public/images.zip` là bản sao lưu của thư mục này, không cần giải nén.
 - Nếu sửa CSS/JS trong `resources/`: chạy `npm install` rồi `npm run dev` để build lại vào `public/`.
 - Không commit file `.env` (chứa mật khẩu và khóa VNPay). Muốn thêm biến mới thì thêm tên biến vào `.env.example` để người khác biết cần điền.
+- Trang biểu đồ trong quản trị (`/admin/chart`) dùng hàm riêng của MySQL nên **chỉ chạy được với MySQL**. Nếu dùng DB khác thì trang này sẽ lỗi.

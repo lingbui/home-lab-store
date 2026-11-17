@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Auth_Admin\LoginController;
+use App\Http\Controllers\Auth_Admin\ForgotPasswordController;
+use App\Http\Controllers\Auth_Admin\ResetPasswordController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -23,11 +25,14 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\PostCategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\Customer\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\LogoutController as CustomerLogoutController;
 use App\Http\Controllers\Customer\RegisterController as CustomerRegisterController;
+use App\Http\Controllers\Customer\ForgotPasswordController as CustomerForgotPasswordController;
+use App\Http\Controllers\Customer\ResetPasswordController as CustomerResetPasswordController;
 use App\Http\Controllers\Customer\SearchController as CustomerSearchController;
 use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\CartController as CustomerCartController;
@@ -65,6 +70,12 @@ Route::post('/register', [CustomerRegisterController::class, 'register']);
 Route::get('/fulfill/information', [CustomerRegisterController::class, 'fulfill']);
 // tao tai khoan
 Route::post('/create/account', [CustomerRegisterController::class, 'createAccount']);
+
+// quên mật khẩu khách hàng
+Route::get('/forgot/password', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('customer.password.request');
+Route::post('/forgot/password', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('customer.password.email');
+Route::get('/reset/password/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('customer.password.reset');
+Route::post('/reset/password', [CustomerResetPasswordController::class, 'reset'])->name('customer.password.update');
 
 // tim kiem san pham 
 Route::get('/search', [CustomerSearchController::class, 'search']);
@@ -138,6 +149,10 @@ Route::get('/gioi-thieu', function () {
 	return view('introduction');
 });
 
+Route::get('/chinh-sach', function () {
+	return view('policy');
+});
+
 Route::get('/lien-he', [CustomerContactController::class, 'getFormContact']);
 Route::post('/lien-he', [CustomerContactController::class, 'postFormContact']);
 
@@ -179,7 +194,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'CheckAdmin'], function () {
 	Route::get('/', [AdminController::class, 'homePage']);
 	Route::get('/home', [AdminController::class, 'homePage']);
 
-	// get change pass 
+	// gửi khuyến mãi (email + SMS)
+	Route::get('/promotion', [PromotionController::class, 'index']);
+	Route::post('/promotion/send', [PromotionController::class, 'send']);
+
+	// get change pass
 	Route::get('/change/password', [LoginController::class, 'getChangePassword']);
 	Route::post('/change/password', [LoginController::class, 'changePassword']);
 
@@ -269,4 +288,10 @@ Route::group(['prefix' => 'admin'], function () {
 	Route::get('/login', [LoginController::class, 'showLoginForm']);
 	Route::post('/login', [LoginController::class, 'postLoginAdmin']);
 	Route::get('/logout', [LoginController::class, 'logoutAdmin']);
+
+	// quên mật khẩu quản trị
+	Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+	Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+	Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+	Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
