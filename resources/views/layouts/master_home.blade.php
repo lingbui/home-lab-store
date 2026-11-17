@@ -673,11 +673,6 @@
                                                     </li>
                                                     <li class="em-links-item">
                                                         <a href="#">
-                                                            <span>Phương thức vận chuyển</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="em-links-item">
-                                                        <a href="#">
                                                             <span>Hình thức thanh toán</span>
                                                         </a>
                                                     </li>
@@ -687,7 +682,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="em-links-item">
-                                                        <a href="#">
+                                                        <a href="/chinh-sach">
                                                             <span>Chính sách bảo mật</span>
                                                         </a>
                                                     </li>

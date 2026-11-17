@@ -148,6 +148,10 @@ Route::get('/gioi-thieu', function () {
 	return view('introduction');
 });
 
+Route::get('/chinh-sach', function () {
+	return view('policy');
+});
+
 Route::get('/lien-he', [CustomerContactController::class, 'getFormContact']);
 Route::post('/lien-he', [CustomerContactController::class, 'postFormContact']);
 
